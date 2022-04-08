@@ -284,6 +284,8 @@ export var Geosearch = Control.extend({
     // make sure both click and touch spawn an address/poi search
     DomEvent.addListener(this._suggestions, 'mousedown', this.geocodeSuggestion, this);
 
+    DomEvent.addListener(this._suggestions, 'touchstart', this.geocodeSuggestion, this);
+
     DomEvent.addListener(this._input, 'blur', function (e) {
       // TODO: this is too greedy and should not "clear"
       // when trying to use the scrollbar or clicking on a non-suggestion item (such as a provider header)
