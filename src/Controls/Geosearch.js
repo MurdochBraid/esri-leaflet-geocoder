@@ -314,16 +314,10 @@ export var Geosearch = Control.extend({
             this._input.value = selected.innerText;
             this._geosearchCore._geocode(selected.unformattedText, selected['data-location'], selected.provider);
             this.clear();
-          } else if (this.options.allowMultipleResults && text.length >= 2) {
-            this._geosearchCore._geocode(this._input.value, undefined);
-            this.clear();
           } else {
             if (list.length === 1) {
               DomUtil.addClass(list[0], 'geocoder-control-selected');
               this._geosearchCore._geocode(list[0].innerHTML, list[0]['data-location'], list[0].provider);
-            } else {
-              this.clear();
-              this._input.blur();
             }
           }
           DomEvent.preventDefault(e);
