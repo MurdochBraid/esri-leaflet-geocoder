@@ -29,7 +29,7 @@
     <div id="map"></div>
 
     <script>
-      var map = L.map('map').setView([37.74, -121.62], 9);
+      var map = L.map('map').setView([-39.057, 174.06472206115734], 14);
       // var tiles = L.esri.basemapLayer('Topographic').addTo(map);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -37,29 +37,11 @@
 
       var searchControl = L.esri.Geocoding.geosearch({
         providers: [
-          L.esri.Geocoding.arcgisOnlineProvider({
-            // countries: ['USA', 'GUM', 'VIR', 'PRI'],
-            // categories: ['Address', 'Postal', 'Populated Place', ],
-            // maxResults: 3,
-            apikey: 'YOUR_API_KEY',
-            nearby: {
-              lat: 37.8095574, // oakland, ca
-              lng: -122.2886336
-            }
-          }),
-          L.esri.Geocoding.mapServiceProvider({
-            label: 'States and Counties',
-            url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer',
-            layers: [2, 3],
-            searchFields: ['NAME', 'STATE_NAME']
-          }),
-          L.esri.Geocoding.featureLayerProvider({
-            url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0',
-            searchFields: ['areaname'],
-            label: 'Cities',
-            formatSuggestion: function (feature) {
-              return feature.properties.areaname + ', ' + feature.properties.st;
-            }
+          L.esri.Geocoding.geocodeServiceProvider({
+          url: 'https://utility.arcgis.com/usrsvcs/servers/773eb4166e7242fbb4c6472304c363f4/rest/services/World/GeocodeServer',
+
+          searchFields: ['SingleLine'],
+          label: 'Test Service'
           })
         ]
       }).addTo(map);

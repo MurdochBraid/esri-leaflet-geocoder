@@ -36,15 +36,8 @@ export var GeocodeService = Service.extend({
   _confirmSuggestSupport: function () {
     this.metadata(function (error, response) {
       if (error) { return; }
-      // pre 10.3 geocoding services dont list capabilities (and dont support maxLocations)
-      // only SOME individual services have been configured to support asking for suggestions
-      if (!response.capabilities) {
-        this.options.supportsSuggest = false;
-      } else if (response.capabilities.indexOf('Suggest') > -1) {
+      // Assume that the service support suggestions as we have changed the endpoint
         this.options.supportsSuggest = true;
-      } else {
-        this.options.supportsSuggest = false;
-      }
       // whether the service supports suggest or not, utilize the metadata response to determine the appropriate parameter name for single line geocoding requests
       this.options.customParam = response.singleLineAddressField.name;
     }, this);

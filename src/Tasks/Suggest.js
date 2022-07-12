@@ -6,7 +6,7 @@ import { Task, Util as EsriUtil } from 'esri-leaflet';
 import { WorldGeocodingServiceUrl } from '../helper';
 
 export var Suggest = Task.extend({
-  path: 'suggest',
+  path: 'findAddressCandidates',
 
   params: {},
 
