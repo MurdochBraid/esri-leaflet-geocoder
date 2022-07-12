@@ -11,7 +11,7 @@ export var Suggest = Task.extend({
   params: {},
 
   setters: {
-    text: 'text',
+    singleLine: 'SingleLine',
     category: 'category',
     countries: 'countryCode',
     maxSuggestions: 'maxSuggestions'

@@ -76,15 +76,10 @@ export var Geosearch = Control.extend({
 
         suggestionItem.innerHTML = suggestion.text;
         suggestionItem.provider = suggestion.provider;
-        suggestionItem['data-magic-key'] = suggestion.magicKey;
+        suggestionItem['data-location'] = suggestion.location;
         suggestionItem.unformattedText = suggestion.unformattedText;
       } else {
-        for (var j = 0; j < list.childNodes.length; j++) {
-          // if the same text already appears in the list of suggestions, append an additional ObjectID to its magicKey instead
-          if (list.childNodes[j].innerHTML === suggestion.text) {
-            list.childNodes[j]['data-magic-key'] += ',' + suggestion.magicKey;
-          }
-        }
+        // We cannot navigate to two different identically named locations meaningfully
       }
       suggestionTextArray.push(suggestion.text);
     }
@@ -241,7 +236,7 @@ export var Geosearch = Control.extend({
       suggestionItem = suggestionItem.parentNode;
     }
 
-    this._geosearchCore._geocode(suggestionItem.unformattedText, suggestionItem['data-magic-key'], suggestionItem.provider);
+    this._geosearchCore._geocode(suggestionItem.unformattedText, suggestionItem['data-location'], suggestionItem.provider);
     this.clear();
   },
 
@@ -317,7 +312,7 @@ export var Geosearch = Control.extend({
           */
           if (selected) {
             this._input.value = selected.innerText;
-            this._geosearchCore._geocode(selected.unformattedText, selected['data-magic-key'], selected.provider);
+            this._geosearchCore._geocode(selected.unformattedText, selected['data-location'], selected.provider);
             this.clear();
           } else if (this.options.allowMultipleResults && text.length >= 2) {
             this._geosearchCore._geocode(this._input.value, undefined);
@@ -325,7 +320,7 @@ export var Geosearch = Control.extend({
           } else {
             if (list.length === 1) {
               DomUtil.addClass(list[0], 'geocoder-control-selected');
-              this._geosearchCore._geocode(list[0].innerHTML, list[0]['data-magic-key'], list[0].provider);
+              this._geosearchCore._geocode(list[0].innerHTML, list[0]['data-location'], list[0].provider);
             } else {
               this.clear();
               this._input.blur();

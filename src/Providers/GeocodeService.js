@@ -8,21 +8,23 @@ export var GeocodeServiceProvider = GeocodeService.extend({
 
   suggestions: function (text, bounds, callback) {
     if (this.options.supportsSuggest) {
-      var request = this.suggest().text(text);
-      if (bounds) {
-        request.within(bounds);
-      }
+      var request = this.suggest().singleLine(text);
+
+      // ignore bounds for the time being
+      // if (bounds) {
+      //   request.within(bounds);
+      // }
 
       return request.run(function (error, results, response) {
         var suggestions = [];
         if (!error) {
-          while (response.suggestions.length && suggestions.length <= (this.options.maxResults - 1)) {
-            var suggestion = response.suggestions.shift();
+          while (response.candidates.length && suggestions.length <= (this.options.maxResults - 1)) {
+            var suggestion = response.candidates.shift();
             if (!suggestion.isCollection) {
               suggestions.push({
-                text: suggestion.text,
-                unformattedText: suggestion.text,
-                magicKey: suggestion.magicKey
+                text: suggestion.address,
+                unformattedText: suggestion.address,
+                location: suggestion.location
               });
             }
           }
@@ -44,9 +46,10 @@ export var GeocodeServiceProvider = GeocodeService.extend({
 
     request.maxLocations(this.options.maxResults);
 
-    if (bounds) {
-      request.within(bounds);
-    }
+    // ignore bounds for the time being
+    // if (bounds) {
+    //   request.within(bounds);
+    // }
 
     return request.run(function (error, response) {
       callback(error, response.results);

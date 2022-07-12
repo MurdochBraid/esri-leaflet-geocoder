@@ -19,48 +19,23 @@ export var GeosearchCore = Evented.extend({
     this._providers = options.providers;
   },
 
-  _geocode: function (text, key, provider) {
-    var activeRequests = 0;
-    var allResults = [];
-    var bounds;
+  _geocode: function (text, location, provider) {
+    var latLng;
 
-    var callback = Util.bind(function (error, results) {
-      activeRequests--;
-      if (error) {
-        return;
-      }
+    latLng =  L.latLng([location.y, location.x])
 
-      if (results) {
-        allResults = allResults.concat(results);
-      }
+    this.fire('results', {
+      results: [{
+        latlng: latLng
+      }],
+      latlng:latLng,
+      text: text
+    }, true);
 
-      if (activeRequests <= 0) {
-        bounds = this._boundsFromResults(allResults);
-
-        this.fire('results', {
-          results: allResults,
-          bounds: bounds,
-          latlng: (bounds) ? bounds.getCenter() : undefined,
-          text: text
-        }, true);
-
-        if (this.options.zoomToResult && bounds) {
-          this._control._map.fitBounds(bounds);
-        }
-
-        this.fire('load');
-      }
-    }, this);
-
-    if (key) {
-      activeRequests++;
-      provider.results(text, key, this._searchBounds(), callback);
-    } else {
-      for (var i = 0; i < this._providers.length; i++) {
-        activeRequests++;
-        this._providers[i].results(text, key, this._searchBounds(), callback);
-      }
+    if (this.options.zoomToResult) {
+      this._control._map.setView(latLng, this._control._map.getMaxZoom());
     }
+
   },
 
   _suggest: function (text) {
