@@ -24,7 +24,7 @@ export var GeocodeServiceProvider = GeocodeService.extend({
               suggestions.push({
                 text: suggestion.address,
                 unformattedText: suggestion.address,
-                location: this.createLocationString(suggestion.location, suggestion.extent)
+                location: this.createLocationString(suggestion.location)
               });
             }
           }
@@ -56,8 +56,8 @@ export var GeocodeServiceProvider = GeocodeService.extend({
     }, this);
   },
 
-  createLocationString: function(location, extent) {
-    return location.x + ":" + location.y + ":" + extent.xmin + ":" + extent.ymin + ":" + extent.xmax + ":" + extent.ymax + ":";
+  createLocationString: function(location) {
+    return location.x + ":" + location.y;
   },
 
   reverseLocationString: function(locationString) {
@@ -66,16 +66,8 @@ export var GeocodeServiceProvider = GeocodeService.extend({
     locationParts = locationString.split(":");
 
     return {
-      location: {
-        x: +locationParts[0],
-        y: +locationParts[1]
-      },
-      extent: {
-        xmin: +locationParts[2],
-        ymin: +locationParts[3],
-        xmax: +locationParts[4],
-        ymax: +locationParts[5]
-      }
+      x: +locationParts[0],
+      y: +locationParts[1]
     };
   }
 });

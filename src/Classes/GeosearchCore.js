@@ -20,13 +20,11 @@ export var GeosearchCore = Evented.extend({
   },
 
   _geocode: function (text, locationString, provider) {
-    var locationData, latLng;
+    var location, latLng;
 
-    locationData = provider.reverseLocationString(locationString);
+    location = provider.reverseLocationString(locationString);
 
-    latLng =  L.latLng([locationData.location.y, locationData.location.x]);
-
-    console.log(provider);
+    latLng =  L.latLng([location.y, location.x]);
 
     this.fire('results', {
       results: [{
@@ -36,11 +34,9 @@ export var GeosearchCore = Evented.extend({
       text: text
     }, true);
 
-    if (this.options.zoomToResult) {
-      this._control._map.fitBounds([
-        [locationData.extent.ymin, locationData.extent.xmin],
-        [locationData.extent.ymax, locationData.extent.xmax]
-      ]);
+    // Always back off 3 from max zoom, we cannot rely on being sent a bounds from the server
+    if (this.options.zoomToResult) { 
+      this._control._map.setView(latLng, this._control._map.getMaxZoom() - 3);
     }
 
   },
