@@ -8,7 +8,12 @@ import { WorldGeocodingServiceUrl } from '../helper';
 export var Suggest = Task.extend({
   path: 'findAddressCandidates',
 
-  params: {},
+  params: { // Always specify that we want EPSG:4326 coordinates
+    outSr: {
+      "wkid":4326,
+      "latestWkid":4326
+    }
+  },
 
   setters: {
     singleLine: 'SingleLine',
