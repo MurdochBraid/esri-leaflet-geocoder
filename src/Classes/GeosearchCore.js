@@ -19,10 +19,14 @@ export var GeosearchCore = Evented.extend({
     this._providers = options.providers;
   },
 
-  _geocode: function (text, location, provider) {
-    var latLng;
+  _geocode: function (text, locationString, provider) {
+    var locationData, latLng;
 
-    latLng =  L.latLng([location.y, location.x])
+    locationData = provider.reverseLocationString(locationString);
+
+    latLng =  L.latLng([locationData.location.y, locationData.location.x]);
+
+    console.log(provider);
 
     this.fire('results', {
       results: [{
@@ -33,7 +37,10 @@ export var GeosearchCore = Evented.extend({
     }, true);
 
     if (this.options.zoomToResult) {
-      this._control._map.setView(latLng, this._control._map.getMaxZoom());
+      this._control._map.fitBounds([
+        [locationData.extent.ymin, locationData.extent.xmin],
+        [locationData.extent.ymax, locationData.extent.xmax]
+      ]);
     }
 
   },
